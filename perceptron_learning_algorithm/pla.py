@@ -2,17 +2,17 @@ import pandas as pd #pandas gives us a data frame, which is a powerful tool for 
 import numpy as np #numpy is a powerful numerical library we will use for a couple calculations
 import pla_plot
 
-#read in the coin-data from an excel file
+# read in the coin-data from an excel file
 coin_data = pd.read_excel('coin-data.xlsx', 'coin-data', header=0)
 
 # create the scalar vector of '1's..this is the bit of trickery that let's us turn our summation into
 # a convenient dot product
 scalar = pd.Series([1] * len(coin_data), name='scalar')
 
-#create our x vector with the added scalar dimension
+# create our x vector with the added scalar dimension
 x = pd.concat((scalar,coin_data.ix[:, ['size', 'mass']]), axis=1)
 
-#we will create our y vector, y is the corresponding correct classification for each row of data
+# we will create our y vector, y is the corresponding correct classification for each row of data
 y = coin_data['classification']
 
 # what this does is return a vector of random weights that matches the length of x. so in our case
@@ -43,7 +43,7 @@ while misclassified != 0:
 
   misclassified = 0
 
-  #iterate through all the rows of x
+  # iterate through all the rows of x
   for index,row in x.iterrows():
 
     # when we take the dot product of the weight vector 'w' and the row of our data set 'row'
@@ -54,7 +54,7 @@ while misclassified != 0:
     # row is a row with three columns...it flips it to one column and three rows. This is just how
     # we take a dot product, one set is vertical, the other is horizontal, don't worry too much
     # about it.
-    #[1,2,3].T  => [ 1,
+    # [1,2,3].T  => [ 1,
     #                2,
     #                3,]
 
@@ -77,15 +77,18 @@ while misclassified != 0:
       # for other rows in the short term. Over the long term, given the data you have is linearly
       # separable, there is a proof that this weight update scheme is correct and will lead you
       # to classifying all the points correctly.
-      w = np.add(w,y[index]*row)
+      #print w
+      #print y[index]
+      print row.values
+      w = np.add(w,y[index]*row.values)
 
 
-#print out the weights so we can see the final result
+# print out the weights so we can see the final result
 print "\n"
 print "The final values for our weights that correctly classify the data: "
 print w
 
-#plot the data with the separating plane using a function we define in the file 'pla_plot.py'
+# plot the data with the separating plane using a function we define in the file 'pla_plot.py'
 pla_plot.pla_plot(w)
 
 
